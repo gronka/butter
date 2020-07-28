@@ -1,10 +1,7 @@
 package crawler
 
 import (
-	"io/ioutil"
 	"path/filepath"
-
-	"butter/types"
 
 	"github.com/gronka/tg"
 )
@@ -18,59 +15,8 @@ type Dir struct {
 	ImageIdx  int
 }
 
-// TODO: remember position image idx for each folder in the tree
-func getChildren(path string) []string {
-	//parentPath, _ := cleanSplit(path)
-	folders, _ := getFoldersAndImages(path)
-	return folders
-}
-
-func getSiblingsAndIdx(path string) ([]string, int) {
-	parentPath, currentFolderName := cleanSplit(path)
-	files, err := ioutil.ReadDir(parentPath)
-	if err != nil {
-		panic(err)
-	}
-
-	var siblings []string
-	currentIdx := -1
-	for _, file := range files {
-		if file.IsDir() {
-			siblings = append(siblings, file.Name())
-			if currentFolderName == file.Name() {
-				currentIdx = len(siblings) - 1
-			}
-		}
-	}
-	return siblings, currentIdx
-}
-
-func getFoldersAndImages(path string) ([]string, []string) {
-	files, err := ioutil.ReadDir(path)
-	if err != nil {
-		panic(err)
-	}
-
-	var folders []string
-	var images []string
-	for _, file := range files {
-		fileName := file.Name()
-		if file.IsDir() {
-			folders = append(folders, fileName)
-
-		} else {
-			extension := filepath.Ext(fileName)
-			if types.IsImage[extension] {
-				images = append(images, fileName)
-			}
-
-		}
-	}
-	return folders, images
-}
-
+// incrementFolderPath should be called with inSibling false on first call
 func incrementFolderPath(path string, skipChildren bool) (newPath string) {
-	tg.Info("INC=============================")
 	clean := filepath.Clean(path)
 	children := getChildren(clean)
 
@@ -89,12 +35,45 @@ func incrementFolderPath(path string, skipChildren bool) (newPath string) {
 		}
 	}
 
-	tg.Info("INC=============================")
 	return newPath
+}
+
+func decrementFolderPath(path string) (newPath string) {
+	clean := filepath.Clean(path)
+
+	siblings, currentIdx := getSiblingsAndIdx(clean)
+	prevIdx := currentIdx - 1
+	if prevIdx >= 0 {
+		parentPath, _ := cleanSplit(clean)
+		pickSibling := filepath.Join(parentPath, siblings[prevIdx])
+		newPath = findLastChild(pickSibling)
+	} else {
+		parentPath, _ := cleanSplit(clean)
+		newPath = decrementFolderPath(parentPath)
+	}
+	return newPath
+}
+
+func findLastChild(path string) (lastChild string) {
+	tg.Info(path)
+	children := getChildren(path)
+	if len(children) > 0 {
+		nextBranch := filepath.Join(path, children[len(children)-1])
+		lastChild = findLastChild(nextBranch)
+	} else {
+		lastChild = path
+	}
+	return lastChild
 }
 
 func (craw *Crawler) incrementDir() {
 	newPath := incrementFolderPath(craw.CurrentDir.Path, false)
-	tg.Info(newPath)
+	tg.Info("incrementDir: " + newPath)
+	craw.JumpToPath(newPath)
+}
+
+func (craw *Crawler) decrementDir() {
+	newPath := decrementFolderPath(craw.CurrentDir.Path)
+	tg.Info("decrementDir: " + newPath)
 	craw.JumpToPath(newPath)
 }

@@ -47,10 +47,8 @@ func RunUntilDeath(window *Window) {
 			break
 		}
 
-		// TODO: this draw seems to be linked to fps
 		window.DrawImage()
 		glfw.PollEvents()
-
 	}
 }
 
@@ -81,6 +79,7 @@ func StartGlWindow(window *Window) error {
 	return nil
 }
 
+// setupInput attaches the callback to handle keystrokes
 func setupInput(window *Window) {
 	window.GlWindow.SetKeyCallback(
 		func(_ *glfw.Window,

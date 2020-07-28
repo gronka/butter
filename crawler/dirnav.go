@@ -15,7 +15,7 @@ type Dir struct {
 	ImageIdx  int
 }
 
-// incrementFolderPath should be called with inSibling false on first call
+// incrementFolderPath should be called with skipChildren false on first call
 func incrementFolderPath(path string, skipChildren bool) (newPath string) {
 	clean := filepath.Clean(path)
 	children := getChildren(clean)

@@ -10,7 +10,7 @@ func main() {
 	if len(os.Args) > 1 {
 		path = os.Args[1]
 	} else {
-		path = "/home/supper/Downloads/memes/monster.jpg"
+		path = "/home/supper/Downloads/memes/cc/monster.jpg"
 	}
 
 	var engine Engine

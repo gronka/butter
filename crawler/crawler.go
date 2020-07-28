@@ -22,9 +22,11 @@ type Crawler struct {
 
 func (craw *Crawler) CurrentImagePath() string {
 	path := ""
-	tg.Info(craw.CurrentDir.Path)
 	if len(craw.CurrentDir.Images) == 0 {
-		path = filepath.Clean("./assets/not_found.jpg")
+		path = filepath.Join(
+			craw.CurrentDir.Path,
+			"",
+		)
 	} else {
 		path = filepath.Join(
 			craw.CurrentDir.Path,
@@ -47,11 +49,11 @@ func (craw *Crawler) Start() {
 			break
 
 		case types.PREV_DIR:
-			craw.ShiftFolderIdx(-1, craw.CurrentDir.Path)
+			craw.decrementDir()
 			break
 
 		case types.NEXT_DIR:
-			craw.ShiftFolderIdx(1, craw.CurrentDir.Path)
+			craw.incrementDir()
 			break
 
 		default:
@@ -60,13 +62,24 @@ func (craw *Crawler) Start() {
 	}
 }
 
+func (craw *Crawler) JumpToPath(path string) {
+	craw.CurrentDir.Path = path
+	craw.CurrentDir.Folders, craw.CurrentDir.Images = getFoldersAndImages(path)
+	craw.CurrentDir.ImageName = ""
+	craw.CurrentDir.ImageIdx = 0
+	craw.LoadImage()
+}
+
 func (craw *Crawler) JumpToImage(path string) {
-	craw.setCurrentImage(path)
-	err := craw.Canvas.LoadImage(craw.CurrentImagePath())
-	tg.Check(err, "failed to load image")
+	craw.setDirFromImagePath(path)
+	craw.LoadImage()
 }
 
 func (craw *Crawler) ShiftImageIdx(shift int) {
+	if len(craw.CurrentDir.Images) == 0 {
+		return
+	}
+
 	idx := craw.CurrentDir.ImageIdx + shift
 	if idx >= len(craw.CurrentDir.Images) {
 		idx = 0
@@ -74,6 +87,19 @@ func (craw *Crawler) ShiftImageIdx(shift int) {
 		idx = len(craw.CurrentDir.Images) - 1
 	}
 	craw.CurrentDir.ImageIdx = idx
-	err := craw.Canvas.LoadImage(craw.CurrentImagePath())
+	craw.LoadImage()
+}
+
+func (craw *Crawler) LoadImage() {
+	path := ""
+	if len(craw.CurrentDir.Images) == 0 {
+		path = filepath.Clean("./assets/not_found.jpg")
+	} else {
+		path = filepath.Join(
+			craw.CurrentDir.Path,
+			craw.CurrentDir.Images[craw.CurrentDir.ImageIdx],
+		)
+	}
+	err := craw.Canvas.LoadImage(path)
 	tg.Check(err, "failed to load image")
 }

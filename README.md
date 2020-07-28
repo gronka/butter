@@ -1,5 +1,28 @@
-you should be able to go install this then
-./butter imageName
+### How To
+Install go toolchain
 
-I'll test it later
+```
+git clone https://github.com/gronka/butter
+cd butter
+go install butter
+```
 
+Then run from anywhere with `butter {imagename}`
+
+### Commands
+e -> Up a directory (to the very last child of the previous sibling dir)
+d -> Down a directory (to the first child of this directory or the next silbing dir)
+f -> Next image (in this dir)
+s -> Previous image (in this dir)
+
+
+### TODO
+* disable image wrapping
+* goroutines for thumbnail generation by the crawler
+* config file
+* configurable input binding
+
+### BUGS
+* image scaling bugs on window resize
+* decrementFolderPath cannot escape current parentPath
+* keystrokes don't feel buttery

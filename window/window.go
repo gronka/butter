@@ -55,15 +55,20 @@ func RunUntilDeath(window *Window) {
 }
 
 func StartGlWindow(window *Window) error {
-	w := 1920
-	h := 1080
+	primary := glfw.GetPrimaryMonitor()
+	currentMode := primary.GetVideoMode()
+	mW := currentMode.Width
+	mH := currentMode.Height
 
 	glfw.WindowHint(glfw.ContextVersionMajor, 2)
 	glfw.WindowHint(glfw.ContextVersionMinor, 1)
-	glWindow, err := glfw.CreateWindow(w, h, "buttergallery", nil, nil)
+	// set window to be 1/4 of screen area
+	glWindow, err := glfw.CreateWindow(mW/2, mH/2, "buttergallery", nil, nil)
 	if err != nil {
 		return err
 	}
+	// set window to top-right
+	glWindow.SetPos(mW/2, 0)
 
 	window.GlWindow = glWindow
 	window.GlWindow.MakeContextCurrent()

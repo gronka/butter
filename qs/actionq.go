@@ -3,7 +3,7 @@ package qs
 import (
 	"fmt"
 
-	"butter/types"
+	"github.com/gronka/butter/types"
 	//"github.com/gronka/tg"
 )
 

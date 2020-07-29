@@ -1,9 +1,9 @@
 package main
 
 import (
-	"butter/crawler"
-	"butter/qs"
-	"butter/window"
+	"github.com/gronka/butter/crawler"
+	"github.com/gronka/butter/qs"
+	"github.com/gronka/butter/window"
 
 	"github.com/gronka/tg"
 )

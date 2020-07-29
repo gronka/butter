@@ -1,4 +1,4 @@
-module butter
+module github.com/gronka/butter
 
 go 1.13
 

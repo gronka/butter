@@ -4,7 +4,7 @@ import (
 	"io/ioutil"
 	"path/filepath"
 
-	"butter/types"
+	"github.com/gronka/butter/types"
 )
 
 func cleanSplit(path string) (string, string) {

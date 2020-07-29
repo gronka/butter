@@ -3,10 +3,9 @@ package crawler
 import (
 	"path/filepath"
 
-	"butter/qs"
-	"butter/types"
-	"butter/window"
-
+	"github.com/gronka/butter/qs"
+	"github.com/gronka/butter/types"
+	"github.com/gronka/butter/window"
 	"github.com/gronka/tg"
 )
 

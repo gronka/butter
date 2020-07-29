@@ -1,5 +1,16 @@
+# butter
+butter is a lightweight, home-row-based image gallery written in golang with 
+opengl bindings and threading to create a buttery smooth experience.
+
 ### How To
-Install go toolchain
+Install go toolchain, then install go-gl. It has to compile, so takes a couple minutes:
+
+```
+go get -u github.com/go-gl/glfw/v3.3/glfw
+go get -u github.com/go-gl/gl/v2.1/gl
+```
+
+Install butter:
 
 ```
 git clone https://github.com/gronka/butter
@@ -10,21 +21,9 @@ go install butter
 Then run from anywhere with `butter {imagename}`
 
 ### Commands
-* e -> Up a directory (to the very last child of the previous sibling dir)
-* d -> Down a directory (to the first child of this directory or the next silbing dir)
+Commands revolve around esdf (and later ijkl)
+
 * f -> Next image (in this dir)
 * s -> Previous image (in this dir)
-
-
-### TODO
-* disable image wrapping
-* goroutines for thumbnail generation by the crawler
-* config file
-* configurable input binding
-* goroutines to preload images
-* remember image position in each directory
-
-### BUGS
-* image scaling bugs on window resize
-* decrementFolderPath cannot escape current parentPath
-* keystrokes don't feel buttery
+* e -> Up a directory (to the very last child of the previous sibling dir)
+* d -> Down a directory (to the first child of this directory or the next silbing dir)

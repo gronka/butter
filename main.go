@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/gronka/tg"
 	"os"
 )
 
@@ -9,12 +10,13 @@ func main() {
 	path := ""
 	if len(os.Args) > 1 {
 		path = os.Args[1]
-	} else {
-		path = "/home/supper/Downloads/memes/cc/monster.jpg"
 	}
+	conf := GenerateConfig(path)
+
+	tg.Info(conf)
 
 	var engine Engine
-	params := EngineParams{InitialImagePath: path}
+	params := EngineParams{InitialImagePath: conf.InitialPath}
 	engine.init(params)
 	engine.start()
 }

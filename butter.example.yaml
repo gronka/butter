@@ -1,0 +1,4 @@
+# set desired values and copy this file to ~/.config/butter.yaml
+# initialPath is the default path/file loaded if no path is given. set it to 
+# "CURRENT" to load the directory butter is executed from
+initialPath: ""

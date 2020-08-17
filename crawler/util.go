@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 
 	"butter/types"
+	"github.com/gronka/tg"
 )
 
 func cleanSplit(path string) (string, string) {
@@ -41,7 +42,9 @@ func getSiblingsAndIdx(path string) ([]string, int) {
 func getFoldersAndImages(path string) ([]string, []string) {
 	files, err := ioutil.ReadDir(path)
 	if err != nil {
-		panic(err)
+		// TODO: 'grey out' dirs we can't read
+		tg.Warn("Cannot read " + path + " with error:")
+		tg.Warn(err)
 	}
 
 	var folders []string
